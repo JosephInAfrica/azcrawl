@@ -74,7 +74,7 @@ def import_agents(name):
                 print ('%s not added'%row[0])
                 db.session.rollback()
 
-def readcsvandmail(filename='thailandwca.csv',topic='Shall we visit your office in middle of May--Superlink Logistics China',template='thailandvisit.html'):
+def readcsvandmail(filename='azamail.csv',topic='Shall we visit your office in middle of May--Superlink Logistics China',template='thailandvisit.html'):
     import csv
 
     with open(filename) as csvfile:

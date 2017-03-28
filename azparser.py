@@ -288,22 +288,39 @@ sample="""
 
 """
 
+def parse(url):
+	soup=BeautifulSoup(get_content(url),'html.parser')
 
-soup=BeautifulSoup(sample,'html.parser')
+	company_name=soup.find('div',class_='listing_info').find('h2').get_text()
+	print (company_name)
 
-print (soup.find('div',class_='listing_info').find('h2').get_text())
-listing_boxes= (soup.find('div',class_='listing_info').find_all('div',class_='listing_info_box'))
 
-# if len(listing_boxes)>1:
-# 	print (listing_boxes[0])
-# 	print (listing_boxes[1])
+	boxes=soup.find_all('div',class_='listing_info_box')
 
-print (soup.find('div',class_='listing_info').find('li').get_text())
 
-elements=soup.find_all('li')
-for ele in elements:
-	print (ele.get_text())
-	tel= re.compile(u'Tel: ([1-9\+\(\)\s]+)').findall(ele.get_text())
-		# print ('chosen!%s'%ele)
-	if tel is not None:
-		print ('got tel!%s'%tel)
+	# print (soup.find('div',class_='listing_info').find('li').get_text())
+	box=soup.find('div',class_='listing_info')
+
+	emailreg=re.compile(u'Email: (.*)')
+	telreg=re.compile(u'Tel: (.*)')
+	faxreg=re.compile(u'Fax: (.*)')
+	websitereg=re.compile(u'Website: (.*)')
+	skypereg=re.compile(u'Skype: (.*)')
+	# if (len(boxes))==2:
+
+	address=boxes[0].get_text()
+	print (address)
+
+	eles=box.find_all('li')
+	mail,tel,fax,web,skype=[],[],[],[],[]
+
+	for ele in eles:
+		ele=ele.get_text()
+		mail.append(''.join(re.findall(emailreg,ele)))
+		tel.append(''.join(re.findall(telreg,ele)))
+		web.append(''.join(re.findall(websitereg,ele)))
+		fax.append(''.join(re.findall(faxreg,ele)))
+		skype.append(''.join(re.findall(skypereg,ele)))
+
+	mail,tel,fax,web,skype=','.join([t for t in mail if t is not '']),','.join([t for t in tel if t is not '']),''.join(fax),''.join(web),''.join(skype)
+	print (mail,tel,fax,web,skype)	
